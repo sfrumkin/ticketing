@@ -1,0 +1,48 @@
+import { Ticket } from "../ticket";
+
+it('implements optimistic concurrency control', async () => {
+  jest.setTimeout(20000);
+  //create instance of a ticket
+  const ticket = Ticket.build({
+    title: 'conc',
+    price: 5,
+    userId: '123'
+  });
+  //save the ticket to db
+  await ticket.save();
+  
+  //fetch the ticket twice
+  const firstInstance = await Ticket.findById(ticket.id);
+  const secondInstance = await Ticket.findById(ticket.id);
+  //make two separate change to tickets we fetched
+  firstInstance!.set({price: 10});
+  secondInstance!.set({price: 15});
+  //save the first fetched ticket
+  await firstInstance!.save();
+
+  //save the second fetched ticket - unsuccessful
+  try{
+    await secondInstance!.save();
+  } catch (err)
+  {
+    return;
+  }
+  throw new Error('Should not reach this point');
+});
+
+it('increments version number on multiple saves', async() =>{
+  jest.setTimeout(20000);
+  const ticket = Ticket.build({
+    title: 'c',
+    price: 20,
+    userId: '123'
+  });
+  await ticket.save();
+  expect(ticket.version).toEqual(0);
+  await ticket.save();
+  expect(ticket.version).toEqual(1);
+  await ticket.save();
+  expect(ticket.version).toEqual(2);
+  await ticket.save();
+  expect(ticket.version).toEqual(3);
+});
