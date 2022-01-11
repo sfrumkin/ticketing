@@ -3,7 +3,7 @@ name: deploy-auth
 on:
   pull:
     branches:
-      - main
+      - master
     paths:
       - 'auth/**'
 
