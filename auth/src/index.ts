@@ -7,7 +7,7 @@ const start = async () => {
   console.log("starting up now... ");
 
   if (!process.env.JWT_KEY) {
-    throw new Error('JWT_KEY must be defined');
+    throw new Error('JWT_KEY must be defined today and tomorrow and every day forever');
   }
 
   if (!process.env.MONGO_URI) {
