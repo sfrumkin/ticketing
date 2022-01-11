@@ -4,7 +4,7 @@ import { app } from './app';
 
 const start = async () => {
 
-  console.log("starting up now... ");
+  console.log("starting up now again... ");
 
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined today and tomorrow and every day forever always');
